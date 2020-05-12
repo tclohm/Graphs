@@ -75,17 +75,16 @@ class Graph:
 
         This should be done using recursion.
         """
-        path = []
         visited = set()
-        def dft(vertex):
-            if starting_vertex is None:
-                return
-            path.append(vertex)
+
+        def dft(vertex, visited):
             visited.add(vertex)
-            for next_vert in self.get_neighbors(vertex):
-                if next_vert not in visited:
-                    dft(next_vert)
-        dft(starting_vertex)
+            print(vertex)
+            for neighbor in self.get_neighbors(vertex):
+                if neighbor not in visited:
+                    dft(neighbor, visited)
+
+        return dft(starting_vertex, visited)
         
     def bfs(self, starting_vertex, destination_vertex):
         """
@@ -111,7 +110,7 @@ class Graph:
                     # Copy path to avoid pass by reference
                     new_path = list(path)
                     new_path.append(next_vert)
-                    print(path, new_path)
+                    #print(path, new_path)
                     q.enqueue(new_path)
 
 
@@ -139,7 +138,7 @@ class Graph:
                     # Copy path to avoid pass by reference bug
                     new_path = list(path)
                     new_path.append(next_vert)
-                    print(path, new_path)
+                    #print(path, new_path)
                     s.push(new_path)
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
