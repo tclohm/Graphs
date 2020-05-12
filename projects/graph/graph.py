@@ -95,7 +95,6 @@ class Graph:
         """
         q = Queue()
         # Put the starting point in that
-        # Enstack a list to use as our path
         q.enqueue([starting_vertex])
         # Make a set to keep track of where we've been
         visited = set()
@@ -124,7 +123,6 @@ class Graph:
         """
         s = Stack()
         # Put the starting point in that
-        # Enstack a list to use as our path
         s.push([starting_vertex])
         # Make a set to keep track of where we've been
         visited = set()
@@ -134,13 +132,11 @@ class Graph:
             vertex = path[-1]
             if vertex not in visited:
                 if vertex == destination_vertex:
-                    # Do the thing!
                     return path
                 visited.add(vertex)
                 # For each edge in the item
                 for next_vert in self.get_neighbors(vertex):
                     # Copy path to avoid pass by reference bug
-                    # Make a copy of path rather than reference
                     new_path = list(path)
                     new_path.append(next_vert)
                     print(path, new_path)
