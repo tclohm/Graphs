@@ -163,7 +163,8 @@ class Graph:
             for neighbor in self.get_neighbors(current):
                 if neighbor not in visited:
                     new_path = traverse(neighbor, destination_vertex, visited, path)
-                    if new_path:
+                    #print("new", new_path)
+                    if new_path is not None:
                         return new_path
             return None
 
