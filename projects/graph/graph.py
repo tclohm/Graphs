@@ -76,12 +76,12 @@ class Graph:
         This should be done using recursion.
         """
         path = []
-        visited = {}
+        visited = set()
         def dft(vertex):
             if starting_vertex is None:
                 return
             path.append(vertex)
-            visited[vertex] = True
+            visited.add(vertex)
             for next_vert in self.get_neighbors(vertex):
                 if next_vert not in visited:
                     dft(next_vert)
@@ -105,13 +105,11 @@ class Graph:
             vertex = path[-1]
             if vertex not in visited:
                 if vertex == destination_vertex:
-                    # Do the thing!
                     return path
                 visited.add(vertex)
                 # For each edge in the item
                 for next_vert in self.get_neighbors(vertex):
-                    # Copy path to avoid pass by reference bug
-                    # Make a copy of path rather than reference
+                    # Copy path to avoid pass by reference
                     new_path = list(path)
                     new_path.append(next_vert)
                     print(path, new_path)
@@ -156,23 +154,26 @@ class Graph:
 
         This should be done using recursion.
         """
-        def helper(start, end, path=[], visited=[]):
-            if start in visited:
-                print("start in visited", path)
+        visited = set()
+        path = []
+
+        def traverse(current, destination, visited, path):
+
+            visited.add(current)
+            path = path + [current]
+
+            if current == destination_vertex:
                 return path
 
-            path += [start]
-            visited += [start]
-
-            if start == end:
-                print("base case", path)
-                return path
-
-            for neighbor in self.get_neighbors(start):
+            for neighbor in self.get_neighbors(current):
                 if neighbor not in visited:
-                    return helper(neighbor, end, path, visited)
+                    new_path = traverse(neighbor, destination_vertex, visited, path)
+                    if new_path:
+                        return new_path
+            return None
 
-        return helper(starting_vertex, destination_vertex)
+        return traverse(starting_vertex, destination_vertex, visited, path)
+
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
