@@ -7,14 +7,13 @@ def build_graph(ancestors):
 	graph = Graph()
 
 	for ancestor in ancestors:
-		(first_relative, second_relative) = ancestor
-		if first_relative not in graph.vertices:
-			graph.add_vertex(first_relative)
-		if second_relative not in graph.vertices:
-			graph.add_vertex(second_relative)
+		(parent, child) = ancestor
+		
+		if parent not in graph.vertices:
+			graph.add_vertex(parent)
+		if child not in graph.vertices:
+			graph.add_vertex(child)
 
-	for relationship in ancestors:
-		(parent, child) = relationship
 		graph.add_edge(child, parent)
 
 	return graph
@@ -24,30 +23,33 @@ def earliest_ancestor(ancestors, starting_node):
 	# breadth first approach, want to take it layer by layer
 	# start at vertex
 	queue = Queue()
-	visited = set()
-	queue.enqueue(starting_node)
+	queue.enqueue([starting_node])
+	print("--------------")
+	print("Starting node:", starting_node)
 
 	# what are we looking for? the oldest ancestor which connected to our starting node
 	ancestor = -1
+	max_path_length = 1
 
 	while queue.size() > 0:
 		# explore the vertex
-		current = queue.dequeue()
+		path = queue.dequeue()
+		print("path", path)
+		current = path[-1]
 		print("our current", current)
-		# check to make sure we have neighbors
-		if len(graph.get_neighbors(current)) != 0:
-			for relative in graph.get_neighbors(current):
-				# if unexplored
-				print("current:", current, "relatives:", relative)
-				if relative not in visited:
-					# explore the adjacent vertex
-					print("enqueued", relative)
-					queue.enqueue(relative)
-		# check to see if our visited set is not empty, if it's not our current will become our ancestor
-		elif visited:
+		# if lengthe path is greater than max path and current is less than ancestor, make ancestor to current
+		# max_path_length is a path length
+		if (len(path) >= max_path_length and current < ancestor) or (len(path) > max_path_length):
 			ancestor = current
-		# if our current is not in our set, add it
-		if current not in visited:
-			visited.add(current)
-
+			max_path_length = len(path)
+		# check the neighbors, copy the list and add the neighbors to each copy
+		for relative in graph.get_neighbors(current):
+			print("current:", current, "relatives:", relative)
+			path_copy = list(path)
+			path_copy = path_copy + [relative]
+			# explore the adjacent vertex
+			print("enqueued", path_copy)
+			queue.enqueue(path_copy)
+		# check to see if our visited set is not empty, if it's not our current will become our ancestor
+	print("FOUND ancestor:", ancestor)
 	return ancestor
