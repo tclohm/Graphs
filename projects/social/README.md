@@ -48,9 +48,23 @@ Note that in this sample, Users 3, 4 and 9 are not in User 1's extended social n
 
 1. To create 100 users with an average of 10 friends each, how many times would you need to call `add_friendship()`? Why?
 
+```
+	100 / 2 = 50. We would need to call add_friendships 50 times because friendship is bidirectional. Friend 1 is friends with Friend 2, therefore Friend 2 is friends with Friend 1.
+```
+
 2. If you create 1000 users with an average of 5 random friends each, what percentage of other users will be in a particular user's extended social network? What is the average degree of separation between a user and those in his/her extended network?
 
+```
+	One thousand with 5 rand friends each. (1000 * 5 = 5000 connections)
+	Percentage of user in a particular user's 'extended' network....
 
+	Let's assume that this a perfect graph. Everyone is connected with 5 connections each. The user1 would have 100% connectivity through their extended network. Now as we tighten our constraints, the average is 5 friends for a user. We will have some nodes with more of less connections but it will keep us close to 100% connectivity.
+
+	Running the algorithm a couple of times looking for a certain node, let say, 22 and returning the length of our results divide by total nodes in the graph we can to have roughly 99% of the time the user will have a connection to another. 
+
+	The average degree of seperation between a user and those in their extended next working is 5 degrees. This essential is Miligram's experiment with 6 degrees of seperation.
+
+```
 
 ## 4. Stretch Goal
 
