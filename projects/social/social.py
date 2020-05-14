@@ -1,7 +1,9 @@
 import random
 import sys
+import time
 sys.path.insert(0, '../graph')
 from util import Queue
+
 
 class User:
     def __init__(self, name):
@@ -19,11 +21,14 @@ class SocialGraph:
         """
         if user_id == friend_id:
             print("WARNING: You cannot be friends with yourself")
+            return False
         elif friend_id in self.friendships[user_id] or user_id in self.friendships[friend_id]:
             print("WARNING: Friendship already exists")
+            return False
         else:
             self.friendships[user_id].add(friend_id)
             self.friendships[friend_id].add(user_id)
+            return True
 
     def add_user(self, name):
         """
@@ -71,6 +76,33 @@ class SocialGraph:
             friend_one, friend_two = friendship
             self.add_friendship(friend_one, friend_two)
 
+    def populate_graph_linearly(self, num_users, avg_friendships):
+        # reset the graph
+        self.last_id = 0
+        self.users = {}
+        self.friendships = {}
+
+        # add users
+        # write for loop that calls create user
+        for index in range(num_users):
+            self.add_user(f"User {index+1}")
+
+        target_friendships = num_users * avg_friendships
+        total_friendships = 0
+        collisions = 0
+        while total_friendships < target_friendships:
+            # pick a random user
+            user_id = random.randint(1, num_users)
+            # pick another random user
+            friend_id = random.randint(1, num_users)
+            # try and create the friendship
+            if self.add_friendship(user_id, friend_id):
+                # if it works, increment the counter
+                total_friendships += 2
+            else:
+                # if not, try again
+                collisions += 1
+
     def get_all_social_paths(self, user_id):
         """
         Takes a user's user_id as an argument
@@ -102,9 +134,12 @@ class SocialGraph:
 
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populate_graph(1000, 5)
+    start_time = time.time()
+    sg.populate_graph_linearly(1000, 5)
+    end_time = time.time()
+    print(f"Built in {end_time - start_time} seconds")
     # print(sg.friendships)
     print("-------------------------------------")
-    connections = sg.get_all_social_paths(1)
+    # connections = sg.get_all_social_paths(1)
     # print(connections)
-    print("connections and entire network", len(connections) / 1000)
+    # print("connections and entire network", len(connections) / 1000)
